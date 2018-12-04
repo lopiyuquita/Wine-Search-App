@@ -41,14 +41,14 @@ There are technical and applicaiton purposess for this project as described belo
                 (b) Token Authentication  
                 (c) Swagger Doc
                 (d) CRUD minimum requirements:  
-                    * REST API:  
-                      • POST  
-                      • PUT  
-                      • DELETE    
-                    * Web Forms:  
-                      • create()  
-                      • modify()  
-                      • delete()  
+                    (i) REST API:  
+                        • POST  
+                        • PUT  
+                        • DELETE    
+                    (ii) Web Forms:  
+                        • create()  
+                        • modify()  
+                        • delete()  
                                                                    
 **2. The application purpose)**  
     • To develop a webapp which allows users to run general/ starting-point search to find wines that 
@@ -69,50 +69,51 @@ I will use winemag-data-130k-v2.csv
 
 (4) Many-to-Many relationships:  
     •	There will be more than one Many-to-Many relationships in the database.  
-        - wine tasters and wine information  See the [data model the actual file will be added later](https://github.com/lopiyuquita/si664finalproject)
+        - wine tasters and wine information  See the [data model the actual model file will be added later](https://github.com/lopiyuquita/si664finalproject)
         - Ohter many-to-many relationshps exist:
             * An example of such is “varieties” and “region_1” tables
 
 
 ## Data model
-(1) [Wine Review Datamodel -the actial file will be added later](https://github.com/lopiyuquita/si664finalproject)  
+(1) [Wine Review Datamodel -the actual model file will be added later](https://github.com/lopiyuquita/si664finalproject)  
 
 Inline-style: 
 ![alt text](https://github.com/lopiyuquita/si664finalproject/blob/master/winesearch/static/si664finalprojectworkingwinesearchdatamodel.png)
 
 ## Package Dependencies (Not finalized as of November 30, 2018)
-certifi==2018.10.15
-chardet==3.0.4
-coreapi==2.3.3
-coreschema==0.0.4
-defusedxml==0.5.0
-Django==2.1.2
-django-allauth==0.38.0
-django-cors-headers==2.4.0
-django-crispy-forms==1.7.2
-django-filter==2.0.0
-django-rest-auth==0.9.3
-django-rest-swagger==2.2.0
-django-test-without-migrations==0.6
-djangorestframework==3.9.0
-idna==2.7
-itypes==1.1.0
-Jinja2==2.10
-MarkupSafe==1.1.0
-mysqlclient==1.3.13
-oauthlib==2.1.0
-openapi-codec==1.3.2
-PyJWT==1.6.4
-python3-openid==3.1.0
-pytz==2018.5
-PyYAML==3.13
-requests==2.20.0
-requests-oauthlib==1.0.0
-simplejson==3.16.0
-six==1.11.0
-social-auth-app-django==3.1.0
-social-auth-core==2.0.0
-uritemplate==3.0.0
-urllib3==1.24.1
-virtualenv==16.0.0
+certifi==2018.10.15  
+chardet==3.0.4  
+coreapi==2.3.3  
+coreschema==0.0.4  
+defusedxml==0.5.0  
+Django==2.1.2  
+django-allauth==0.38.0  
+django-cors-headers==2.4.0  
+django-crispy-forms==1.7.2  
+django-filter==2.0.0  
+django-rest-auth==0.9.3  
+django-rest-swagger==2.2.0  
+django-test-without-migrations==0.6  
+djangorestframework==3.9.0  
+idna==2.7  
+itypes==1.1.0  
+Jinja2==2.10  
+MarkupSafe==1.1.0  
+mysqlclient==1.3.13  
+oauthlib==2.1.0  
+openapi-codec==1.3.2  
+PyJWT==1.6.4  
+python3-openid==3.1.0  
+pytz==2018.5  
+PyYAML==3.13  
+requests==2.20.0  
+requests-oauthlib==1.0.0  
+simplejson==3.16.0  
+six==1.11.0  
+social-auth-app-django==3.1.0  
+social-auth-core==2.0.0  
+uritemplate==3.0.0  
+urllib3==1.24.1  
+virtualenv==16.0.0  
+
 

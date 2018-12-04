@@ -77,8 +77,8 @@ I will use winemag-data-130k-v2.csv
 ## Data model
 (1) [Wine Review Datamodel -the actual model file will be added later](https://github.com/lopiyuquita/si664finalproject)  
 
-Inline-style: 
-![alt text](https://github.com/lopiyuquita/si664finalproject/blob/master/winesearch/static/si664finalprojectworkingwinesearchdatamodel.png)
+As of December 4, 2018:  
+![alt text](https://github.com/lopiyuquita/si664finalproject/blob/master/winesearch/static/si664finalprojectdatamodelDec4.png)
 
 ## Package Dependencies (Not finalized as of November 30, 2018)
 certifi==2018.10.15  

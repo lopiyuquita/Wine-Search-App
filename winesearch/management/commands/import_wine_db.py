@@ -51,16 +51,29 @@ class Command(BaseCommand):
                     region2, _ = Region2.objects.get_or_create(region2_name=region2_name, region1=region1)
 
                 taster_name = row[TASTER_NAME_COL]
-                if taster_name:
-                    taster_name, _ = Taster.objects.get_or_create(taster_name=taster_name)
+                twitter_handles = row[TASTER_TWITTER_HANDLE_COL]
 
-                twitter_handles = row[TASTER_TWITTER_HANDLE_COL] #Taster.objects do not seem right when querying in mysql.
-                if twitter_handles:
-                    twitter_handles, _ = Taster.objects.get_or_create(twitter_handles=twitter_handles)
+                if taster_name:
+                    taster_name, _ = Taster.objects.get_or_create(taster_name=taster_name, twitter_handles=twitter_handles)
 
                 variety_name = row[VARIETY_COL]
                 if variety_name:
                     variety_name, _ = Variety.objects.get_or_create(variety_name=variety_name)
+
+                wine = row[TITLE_COL]
+                description = row[DESCRIPTION_COL]
+                designation = row[DESIGNATION_COL]
+                price = row[PRICE_COL]
+                winery = row[WINERY_COL]
+                if wine:
+                    wine, _ = Wine.objects.get_or_create(wine=wine)
+                    description, _ = Wine.objects.get_or_create(description=description)
+                    designation, _ = Wine.objects.get_or_create(designation=designation)
+                    price, _ = Wine.objects.get_or_create(price=price)
+                    winery, _ = Wine.objects.get_or_create(winery=winery)
+
+
+
 
 
 

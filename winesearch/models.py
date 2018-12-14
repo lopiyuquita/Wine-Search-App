@@ -50,22 +50,32 @@ class Region2(models.Model):
     class Meta:
         unique_together = [['region1', 'region2_name']]
 
+    def __str__(self):
+        return '{}'.format(self.region2_name)
+
 
 class Taster(models.Model):
     taster_id = models.AutoField(primary_key=True)
     taster_name = models.CharField(max_length=45)
     twitter_handles = models.CharField(max_length=45, blank=True, null=True)
 
+    def __str__(self):
+        return '{}'.format(self.taster_name)
+
 
 class Variety(models.Model):
     variety_id = models.AutoField(primary_key=True)
     variety_name = models.CharField(max_length=45, unique=True)
+
+    def __str__(self):
+        return '{}'.format(self.variety_name)
 
 
 class VarietyRegion1(models.Model):
     region1 = models.ForeignKey(Region1, models.DO_NOTHING)
     variety = models.ForeignKey(Variety, models.DO_NOTHING)
     variety_region1_id = models.AutoField(primary_key=True)
+
 
 
 class VarietyRegion2(models.Model):
@@ -86,6 +96,9 @@ class Wine(models.Model):
     region1 = models.ForeignKey(Region1, blank=True, null=True, on_delete=models.DO_NOTHING)
     region2 = models.ForeignKey(Region2, blank=True, null=True, on_delete=models.DO_NOTHING)
     variety = models.ForeignKey(Variety, blank=True, null=True, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return '{}'.format(self.wine)
 
 
 class WineTaster(models.Model):

@@ -11,9 +11,8 @@ admin.site.register(models.Region1)
 admin.site.register(models.Region2)
 admin.site.register(models.Taster)
 admin.site.register(models.Variety)
-admin.site.register(models.VarietyRegion1)
-admin.site.register(models.VarietyRegion2)
 admin.site.register(models.Wine)
 admin.site.register(models.Winery)
-admin.site.register(models.WineryVariety)
-admin.site.register(models.WineTaster)
+
+
+

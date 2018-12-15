@@ -5,7 +5,7 @@
 import csv
 from django.core.management.base import BaseCommand, CommandError
 from winesearch.models import Country, Province, \
-    Region1, Region2, Taster, Variety, VarietyRegion1, VarietyRegion2, WineTaster, Winery, WineryVariety
+    Region1, Region2, Taster, Variety, Wine, Winery
 
 
 COUNTRY_COL = 1
@@ -29,50 +29,83 @@ class Command(BaseCommand):
         parser.add_argument('--file', type=str)
 
     def handle(self, *args, **options):
+        global winery_name
         print(options['file'])
         with open(options['file']) as f:
             reader = csv.reader(f)
+            next(reader)
 
             for row in reader:
                 country_name = row[COUNTRY_COL]
-                if country_name:
-                    country, _ = Country.objects.get_or_create(country_name=country_name)
-
+                price = row[PRICE_COL]
                 province_name = row[PROVINCE_COL]
-                if country_name and province_name:
-                    province, _ = Province.objects.get_or_create(province_name=province_name, country=country)
-
                 region1_name = row[REGION_1_COL]
-                if province_name and region1_name:
-                    region1, _ = Region1.objects.get_or_create(region1_name=region1_name, province=province)
-
                 region2_name = row[REGION_2_COL]
-                if region1_name and region2_name:
-                    region2, _ = Region2.objects.get_or_create(region2_name=region2_name, region1=region1)
-
                 taster_name = row[TASTER_NAME_COL]
                 twitter_handles = row[TASTER_TWITTER_HANDLE_COL]
-
-                if taster_name:
-                    taster_name, _ = Taster.objects.get_or_create(taster_name=taster_name, twitter_handles=twitter_handles)
-
                 variety_name = row[VARIETY_COL]
-                if variety_name:
-                    variety_name, _ = Variety.objects.get_or_create(variety_name=variety_name)
-
+                winery = row[WINERY_COL]
                 wine = row[TITLE_COL]
                 description = row[DESCRIPTION_COL]
                 designation = row[DESIGNATION_COL]
-                price = row[PRICE_COL]
-                winery = row[WINERY_COL]
+                points = row[POINTS_COL]
+
+                country = None
+                province = None
+                region1 = None
+                region2 = None
+
+
+
+                if country_name:
+                    country, _ = Country.objects.get_or_create(country_name=country_name)
+
+
+                if country_name and province_name:
+                    province, _ = Province.objects.get_or_create(province_name=province_name, country=country)
+
+
+                if province_name and region1_name:
+                    region1, _ = Region1.objects.get_or_create(region1_name=region1_name, province=province)
+
+
+                if region1_name and region2_name:
+
+                    region2, _ = Region2.objects.get_or_create(region2_name=region2_name, region1=region1)
+
+
+                if taster_name:
+                    taster_name, _ = Taster.objects.get_or_create(taster_name=taster_name,
+                                                                  twitter_handles=twitter_handles,
+                                                                  points=points)
+
+
+                if variety_name:
+                    variety_name, _ = Variety.objects.get_or_create(variety_name=variety_name)
+
+
+                if winery:
+                    winery_name, _ = Winery.objects.get_or_create(winery_name=winery)
+
+
+                if not price:
+                    price = None
+                else:
+                    price = float(price)
+
                 if wine:
-                    wine, _ = Wine.objects.get_or_create(wine=wine)
-                    description, _ = Wine.objects.get_or_create(description=description)
-                    designation, _ = Wine.objects.get_or_create(designation=designation)
-                    price, _ = Wine.objects.get_or_create(price=price)
-                    winery, _ = Wine.objects.get_or_create(winery=winery)
-
-
+                    wine, _ = Wine.objects.get_or_create(
+                        wine=wine,
+                        description=description,
+                        designation=designation,
+                        price=price,
+                        winery=winery_name,
+                        country=country,
+                        province=province,
+                        region1=region1,
+                        region2= region2,
+                        variety=variety_name,
+                    )
 
 
 

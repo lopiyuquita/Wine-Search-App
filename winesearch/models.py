@@ -15,7 +15,7 @@ class Country(models.Model):
     country_name = models.CharField(max_length=45, unique=True) #outhgt to be unique
 
     class Meta:
-        db_table = 'Country'
+        db_table = 'country'
 
     def __str__(self):
         return '{}'.format(self.country_name)
@@ -28,7 +28,7 @@ class Province(models.Model):
 
     class Meta:
         unique_together = [['country', 'province_name']]
-        db_table = 'Province'
+        db_table = 'province'
 
 
     def __str__(self):
@@ -42,7 +42,7 @@ class Region1(models.Model):
 
     class Meta:
         unique_together = [['province', 'region1_name']]
-        db_table = 'Region1'
+        db_table = 'region1'
 
     def __str__(self):
         return '{}, {}'.format(self.region1_name, self.province.province_name)
@@ -55,7 +55,7 @@ class Region2(models.Model):
 
     class Meta:
         unique_together = [['region1', 'region2_name']]
-        db_table = 'Region2'
+        db_table = 'region2'
 
     def __str__(self):
         return '{}'.format(self.region2_name)
@@ -66,7 +66,7 @@ class Variety(models.Model):
     variety_name = models.CharField(max_length=45, unique=True)
 
     class Meta:
-        db_table = 'Variety'
+        db_table = 'variety'
 
     def __str__(self):
         return '{}'.format(self.variety_name)
@@ -78,7 +78,7 @@ class VarietyRegion1(models.Model):     #Joint model between Region1 and Variety
     variety_region1_id = models.AutoField(primary_key=True)
 
     class Meta:
-        db_table = 'VarietyRegion1'
+        db_table = 'variety_region1'
 
 class VarietyRegion2(models.Model):     #Joint model between Region2 and Variety
     variety = models.ForeignKey(Variety, on_delete=models.DO_NOTHING)
@@ -86,7 +86,7 @@ class VarietyRegion2(models.Model):     #Joint model between Region2 and Variety
     variety_region2_id = models.AutoField(primary_key=True)
 
     class Meta:
-        db_table = 'VarietyRegion2'
+        db_table = 'variety_region2'
 
 
 class Wine(models.Model):
@@ -103,7 +103,7 @@ class Wine(models.Model):
     variety = models.ForeignKey(Variety, blank=True, null=True, on_delete=models.DO_NOTHING)
 
     class Meta:
-        db_table = 'Wine'
+        db_table = 'wine'
 
     def __str__(self):
         return '{}, {}, {}, {}'.format(self.wine, self.description, self.designation, self.price)
@@ -114,7 +114,7 @@ class Winery(models.Model):
     winery_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        db_table = 'Winery'
+        db_table = 'winery'
 
     def __str__(self):
         return '{}'.format(self.winery_name)
@@ -126,7 +126,7 @@ class WineryVariety(models.Model):      #Joint model between Winery and Variety
     winery_variety_id = models.AutoField(primary_key=True)
 
     class Meta:
-        db_table = 'WineryVariety'
+        db_table = 'winery_variety'
 
 
 class Taster(models.Model):
@@ -136,7 +136,7 @@ class Taster(models.Model):
     points = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
-        db_table = 'Taster'
+        db_table = 'taster'
 
     def __str__(self):
         return '{}'.format(self.taster_name)
@@ -148,7 +148,7 @@ class WineTaster(models.Model):     #Joint model between Winery and Variety
     wine = models.ForeignKey(Wine, on_delete=models.DO_NOTHING)
 
     class Meta:
-        db_table = 'WineTaster'
+        db_table = 'wine_taster'
 
 
 

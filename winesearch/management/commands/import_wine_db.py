@@ -5,7 +5,7 @@
 import csv
 from django.core.management.base import BaseCommand, CommandError
 from winesearch.models import Country, Province, \
-    Region1, Region2, Taster, Variety, Wine, Winery
+    Region1, Region2, Taster, Variety, Wine, Winery, WineTaster, WineryVariety
 
 
 COUNTRY_COL = 1
@@ -31,11 +31,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         global winery_name
         print(options['file'])
+        counter = 0
         with open(options['file']) as f:
             reader = csv.reader(f)
             next(reader)
 
             for row in reader:
+                counter += 1
+                if counter % 1000 == 0:
+                    print(counter)
                 country_name = row[COUNTRY_COL]
                 price = row[PRICE_COL]
                 province_name = row[PROVINCE_COL]
@@ -44,8 +48,8 @@ class Command(BaseCommand):
                 taster_name = row[TASTER_NAME_COL]
                 twitter_handles = row[TASTER_TWITTER_HANDLE_COL]
                 variety_name = row[VARIETY_COL]
-                winery = row[WINERY_COL]
-                wine = row[TITLE_COL]
+                winery_name = row[WINERY_COL]
+                wine_name = row[TITLE_COL]
                 description = row[DESCRIPTION_COL]
                 designation = row[DESIGNATION_COL]
                 points = row[POINTS_COL]
@@ -54,6 +58,9 @@ class Command(BaseCommand):
                 province = None
                 region1 = None
                 region2 = None
+                taster = None
+                variety = None
+                winery = None
 
 
 
@@ -75,17 +82,17 @@ class Command(BaseCommand):
 
 
                 if taster_name:
-                    taster_name, _ = Taster.objects.get_or_create(taster_name=taster_name,
+                    taster, _ = Taster.objects.get_or_create(taster_name=taster_name,
                                                                   twitter_handles=twitter_handles,
                                                                   points=points)
 
 
                 if variety_name:
-                    variety_name, _ = Variety.objects.get_or_create(variety_name=variety_name)
+                    variety, _ = Variety.objects.get_or_create(variety_name=variety_name)
 
 
-                if winery:
-                    winery_name, _ = Winery.objects.get_or_create(winery_name=winery)
+                if winery_name:
+                    winery, _ = Winery.objects.get_or_create(winery_name=winery_name)
 
 
                 if not price:
@@ -93,19 +100,26 @@ class Command(BaseCommand):
                 else:
                     price = float(price)
 
-                if wine:
-                    wine, _ = Wine.objects.get_or_create(
-                        wine=wine,
-                        description=description,
-                        designation=designation,
-                        price=price,
-                        winery=winery_name,
-                        country=country,
-                        province=province,
-                        region1=region1,
-                        region2= region2,
-                        variety=variety_name,
-                    )
+                if wine_name:
+                    try:
+                        wine, _ = Wine.objects.get_or_create(
+                            wine=wine_name,
+                            description=description,
+                            designation=designation,
+                            price=price,
+                            winery=winery,
+                            country=country,
+                            province=province,
+                            region1=region1,
+                            region2=region2,
+                            variety=variety,
+                        )
+                        if taster:
+                            wine_taster, _ = WineTaster.objects.get_or_create(wine=wine, taster=taster)
+                        if winery and variety:
+                            winery_variety, _ = WineryVariety.objects.get_or_create(winery=winery, variety=variety)
+                    except ValueError:
+                        print(wine_name, description, designation, price, country, province, region1, region2, variety_name)
 
 
 

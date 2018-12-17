@@ -1,0 +1,166 @@
+/*
+ * Page layout
+ */
+
+body {
+    background-color: #e2d2a5;
+    background-image: url(static/red-wine-in-kitchen_4460x4460.jpg)
+}
+
+/*
+ * Navigation
+ */
+
+nav {
+    background-color: transparent;
+}
+
+/*
+ * Bootstrap navbar
+ */
+
+.navbar-custom {
+    background-color: ##e6e5e6;
+}
+
+/* change the brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: rgba(150,149,149,1);
+    /* padding: 0.8rem 1rem; */
+}
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: rgba(52,49,72,.5);
+    /*padding: 1rem 1rem;*/
+}
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:focus .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+    color: #8E8D8A;
+    background-color: #8E8D8A; /* add background-color to active links */
+}
+
+/*
+ * Bootstrap Pagination
+ */
+
+.pagination > li.page-item {
+    background-color: transparent;
+    border: 1px solid #121213;
+    color: #fff;
+    font-size: 0.75rem;
+    /* line-height: 1rem; */
+    text-decoration: none;
+}
+
+.pagination > li.page-item.active {
+    background-color: ##e6e5e6;
+    color: #fff;
+    /*padding: 0.25rem 0.75rem;*/
+}
+
+/*
+ * HTML 5 main
+ */
+
+main {
+    background-color: transparent;
+}
+
+.container-fluid {
+    background-color: transparent;
+    /*padding: 0.5rem 0.5rem;*/
+}
+
+/*
+ * Footer
+ */
+
+footer {
+    background-color: #e6e5e6;
+    /*padding: 0.8rem 1rem;*/
+}
+
+footer a:link {
+    background-color: transparent;
+    color: ##dcc08b;
+    text-decoration: none;
+}
+
+footer a:active {
+    background-color: transparent;
+    color: #fff;
+}
+
+footer a:hover {
+    background-color: transparent;
+    color: #fff;
+    /* color: #D8C3A5; */
+}
+
+footer a:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer p {
+    background-color: ##e2d2a5;
+    display: block;
+    text-align: left;
+    font-size: 0.875rem;
+    font-stretch: condensed;
+    color: ##e2d2a5;
+}
+
+/*
+ * Headings
+ */
+
+h1, h2, h3, h4 {
+    color: ##d2b786;
+    /* margin-top: 1em; */
+    /*margin-bottom: 0.5rem;*/
+    text-align: left;
+}
+
+/*
+ * Paragraphs
+ */
+
+p {
+    /* color: #8E8D8A; */
+    color: #fff;
+    text-align: justify;
+}
+
+/*
+ * Links
+ * https://www.w3schools.com/css/css_link.asp
+ */
+
+a:link {
+    background-color: transparent;
+    color: ##d2b786;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: transparent;
+    color: ##d2b786;
+    /* color: #D8C3A5; */
+}
+
+a:active {
+    background-color: transparent;
+    color: #8E8D8A;
+}
+
+a:visited {
+    background-color: transparent;
+    color: #8E8D8A;
+    text-decoration: none;
+}
+
+

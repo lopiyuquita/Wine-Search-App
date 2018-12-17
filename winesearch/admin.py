@@ -14,5 +14,3 @@ admin.site.register(models.Variety)
 admin.site.register(models.Wine)
 admin.site.register(models.Winery)
 
-
-

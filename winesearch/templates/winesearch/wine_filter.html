@@ -1,0 +1,77 @@
+{% extends 'winesearch/base.html' %}
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% include 'winesearch/pagination.html' %}
+<article>
+  <header>
+  <div class="row">
+    <div class="col-sm-11">
+      <h3>Wine Search Filter</h3>
+    </div>
+    <div class="col-sm-1">
+      {% if user.is_authenticated %}
+        <a class="btn btn-outline-secondary" href="{% url 'wine_filter' %}">new</a>
+      {% endif %}
+    </div>
+  </div>
+  </header>
+
+
+  <filter>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="px-2 py-2" style="border:1px solid #8E8D8A;">
+        <form action="" method="get">
+          {{ filter.form }}
+            <button type="submit" class="btn btn-outline-success">Filter</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-9">
+     {% for wine in wine_list %}
+        <p><b><a href="{% url 'wine_detail' wine.pk %}">{{ wine.wine }}</a></b></p>
+
+         {% if wine.winery %}
+             <div class="row">
+                <div class="col-sm-2">
+                    <p><b>Wine</b></p>
+                </div>
+                  <div class="col-sm-10">
+                    <p>{{ wine.wine }}</p>
+                </div>
+             </div>
+         {% endif %}
+
+        {% if wine.description %}
+                <div class="row">
+                  <div class="col-sm-2">
+                    <p><b>Description</b></p>
+                  </div>
+                  <div class="col-sm-10">
+                    <p>{{ wine.description }}</p>
+                  </div>
+                </div>
+              {% endif %}
+
+         {% if wine.winery %}
+                <div class="row">
+                  <div class="col-sm-2">
+                    <p><b>Winery</b></p>
+                  </div>
+                  <div class="col-sm-10">
+                    <p>{{ wine.winery }}</p>
+                  </div>
+                </div>
+              {% endif %}
+     {% endfor %}
+    </div>
+  </div>
+  </filter>
+{% endblock content %}
+{#     {% endfor %}#}
+{##}
+{#      {% empty %}#}
+{#      Select one or more filters relevant to your search and then click "filter".#}

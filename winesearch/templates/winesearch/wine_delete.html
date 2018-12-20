@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+{% extends 'winesearch/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+    <p>Are you sure you want to delete the Wine "{{ wine.wine }}"?</p>
+    <button class="btn btn-outline-success">Delete</button>
+    <a class="btn btn-outline-secondary" href="{% url 'wine_detail' wine.pk %}">Cancel</a>
+
+
+
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends 'winesearch/base.html' %}
+
+{% block content %}
+<article>
+  <header>
+    <h1>Wineries</h1>
+  </header>
+
+  <!-- WARNING: there is no missing code between <nav>...</nav> -->
+
+  {% include 'winesearch/pagination.html' %}
+
+
+  {% if  wineries %}
+    <ul>
+      {% for winery in wineries %}
+
+
+    <!-- safe filter on for raw HTML stored in database -->
+    <li><a href="{% url 'country' pk=winery.winery_id %}">{{ winery.winery_name | safe }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No wineries are available to view.</p>
+  {% endif %}
+
+  <p>page count: {{ wineries.count }}</p>
+</article>
+
+{% endblock content %}}

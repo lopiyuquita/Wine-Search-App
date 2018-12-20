@@ -31,15 +31,18 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('winesearch', include('winesearch.urls')),
-    path('admin/', admin.site.urls),
-    #path('auth/', include('social_django.urls', namespace='social')),
-    #path('login/', LoginView.as_view(), name='login'),
-    #path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
+    #path('/', )
+    path('', include('winesearch.urls')),
     #path('winesearch/', include('winesearch.urls')),
-    #path('winesearch/api/rest-auth/', include('rest_auth.urls')),
-    #path('winesearch/api/rest-auth/registration/', include('rest_auth.registration.urls')),
-    #path('api-auth/', include('rest_framework.urls')),
-    #path('winesearch/api/', include('api.urls')),
-]
+    path('admin/', admin.site.urls),
+    path('auth/', include('social_django.urls', namespace='social')),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL},
+         name='logout'),
+
+    path('winesearch/api/rest-auth/', include('rest_auth.urls')),
+    path('winesearch/api/rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('winesearch/api/', include('api.urls')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

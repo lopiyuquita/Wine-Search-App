@@ -3,8 +3,10 @@
  */
 
 body {
-    background-color: #e2d2a5;
-    background-image: url(static/red-wine-in-kitchen_4460x4460.jpg)
+    background-color: #fff;
+    background-size: cover;
+    font-family: Verdana,Arial,sans-serif;
+
 }
 
 /*
@@ -39,7 +41,7 @@ nav {
 .navbar-custom .nav-item:focus .nav-link,
 .navbar-custom .nav-item:hover .nav-link {
     color: #8E8D8A;
-    background-color: #8E8D8A; /* add background-color to active links */
+    background-color: #d2b786; /* add background-color to active links */
 }
 
 /*
@@ -47,10 +49,11 @@ nav {
  */
 
 .pagination > li.page-item {
-    background-color: transparent;
+    background-color: #D2B786;
     border: 1px solid #121213;
     color: #fff;
-    font-size: 0.75rem;
+    font-size: 0.5rem;
+    font_color: #8E8D8A
     /* line-height: 1rem; */
     text-decoration: none;
 }
@@ -131,7 +134,7 @@ h1, h2, h3, h4 {
 
 p {
     /* color: #8E8D8A; */
-    color: #fff;
+    color: #000;
     text-align: justify;
 }
 
@@ -141,20 +144,20 @@ p {
  */
 
 a:link {
-    background-color: transparent;
-    color: ##d2b786;
+    background-color: #d2b786
+    color: #d2b786;
     text-decoration: none;
 }
 
 a:hover {
-    background-color: transparent;
-    color: ##d2b786;
+    background-color: #d2b786;
+    color: #8E8D8A;
     /* color: #D8C3A5; */
 }
 
 a:active {
     background-color: transparent;
-    color: #8E8D8A;
+    color: #d2b786;
 }
 
 a:visited {

@@ -65,6 +65,9 @@ class Variety(models.Model):
     variety_id = models.AutoField(primary_key=True)
     variety_name = models.CharField(max_length=45, unique=True)
 
+    region1 = models.ManyToManyField(Region1, through='VarietyRegion1')
+    region2 = models.ManyToManyField(Region2, through='VarietyRegion2')
+
     class Meta:
         db_table = 'variety'
 
@@ -89,6 +92,19 @@ class VarietyRegion2(models.Model):     #Joint model between Region2 and Variety
         db_table = 'variety_region2'
 
 
+class Taster(models.Model):
+    taster_id = models.AutoField(primary_key=True)
+    taster_name = models.CharField(max_length=45)
+    twitter_handles = models.CharField(max_length=45, blank=True, null=True)
+    points = models.SmallIntegerField(blank=True, null=True, default=0)
+
+    class Meta:
+        db_table = 'taster'
+
+    def __str__(self):
+        return '{}'.format(self.taster_name)
+
+
 class Wine(models.Model):
     wine_id = models.AutoField(primary_key=True)
     wine = models.CharField(max_length=150)
@@ -102,16 +118,76 @@ class Wine(models.Model):
     region2 = models.ForeignKey(Region2, blank=True, null=True, on_delete=models.DO_NOTHING)
     variety = models.ForeignKey(Variety, blank=True, null=True, on_delete=models.DO_NOTHING)
 
+    taster = models.ManyToManyField(Taster, through='WineTaster')
+
     class Meta:
+        managed = False
         db_table = 'wine'
+        ordering = ['wine']
+        verbose_name = 'Wine'
+        verbose_name_plural = 'Wines'
+
 
     def __str__(self):
         return '{}, {}, {}, {}'.format(self.wine, self.description, self.designation, self.price)
+
+    def get_absolute_url(self):
+        # return reverse('wine_detail', args=[str(self.id)])
+        return reverse('wine_detail', kwargs={'pk': self.pk})
+
+    # For filters.py: wine(label), description, variety, region2, region1, province, country, winery, price, points:
+    # @property
+    # def winery_names(self):
+    #     wineries = self.winery.select_related('wine__winery').order_by('wine__winery__winery_name')
+    #
+    #     winery_names = []
+    #     for winery in wineries:
+    #         winery_name = winery.winery_name
+    #         if winery_name is None:
+    #             continue
+    #         if winery_name not in winery_names:
+    #             winery_names.append(winery_name)
+    #     return winery_names
+
+    @property
+    def province_names(self):
+        """
+        Returns a list of Province (names only) associated with a Wine.
+        Not all Wine are associated with a Province. In such cases the
+        Queryset will return as <QuerySet [None]> and the list will need to be checked for
+        None or a TypeError (sequence item 0: expected str instance, NoneType found) runtime
+        error will be thrown.
+        :return: string
+        """
+        countries = self.province.select_related('country__province').order_by(
+            'country__province__province_name')
+
+        province_names = []
+
+        for country in countries:
+            if not country.province:
+                continue
+            province_name = country.province.province_name
+            if province_name not in province_names:
+                province_names.append(province_name)
+        return ', '.join(province_names)
+
+
+class WineTaster(models.Model):     #Joint model between Wine and Taster
+    wine_taster_id = models.AutoField(primary_key=True)
+    taster = models.ForeignKey(Taster, on_delete=models.DO_NOTHING, related_name='related_taster')
+    wine = models.ForeignKey(Wine, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'wine_taster'
 
 
 class Winery(models.Model):
     winery_id = models.AutoField(primary_key=True)
     winery_name = models.CharField(max_length=100, blank=True, null=True)
+    # Can't do select_related for many-to-many.
+    # Intermediate model (Winery -> WineryVariety <- Variety)
+    variety = models.ManyToManyField(Variety, through='WineryVariety')
 
     class Meta:
         db_table = 'winery'
@@ -129,26 +205,6 @@ class WineryVariety(models.Model):      #Joint model between Winery and Variety
         db_table = 'winery_variety'
 
 
-class Taster(models.Model):
-    taster_id = models.AutoField(primary_key=True)
-    taster_name = models.CharField(max_length=45)
-    twitter_handles = models.CharField(max_length=45, blank=True, null=True)
-    points = models.IntegerField(blank=True, null=True, default=0)
-
-    class Meta:
-        db_table = 'taster'
-
-    def __str__(self):
-        return '{}'.format(self.taster_name)
-
-
-class WineTaster(models.Model):     #Joint model between Winery and Variety
-    wine_taster_id = models.AutoField(primary_key=True)
-    taster = models.ForeignKey(Taster, on_delete=models.DO_NOTHING, related_name='related_taster')
-    wine = models.ForeignKey(Wine, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'wine_taster'
 
 
 

@@ -137,8 +137,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '5848834237606-jed5iutu3itgro7e58k1ntabfg8uggd1.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'noUHLzbVEB1X2vwTwlz1Lakv'
+#SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '5848834237606-jed5iutu3itgro7e58k1ntabfg8uggd1.apps.googleusercontent.com'
+#SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'noUHLzbVEB1X2vwTwlz1Lakv'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 LOGIN_URL = '/auth/login/google-oauth2/'

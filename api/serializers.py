@@ -8,7 +8,6 @@ class CountrySerializer ( serializers.ModelSerializer ):
         model = Country
         fields = ('country_id', 'country_name')
 
-
 # Province has a ForeignKey, country:
 class ProvinceSerializer ( serializers.ModelSerializer ):
     country = CountrySerializer ( many=False, read_only=True )
@@ -28,7 +27,6 @@ class ProvinceSerializer ( serializers.ModelSerializer ):
                   'country'
                   )
 
-
 # Region1 has a ForeignKey, province
 class Region1Serializer ( serializers.ModelSerializer ):
     province = ProvinceSerializer ( many=False, read_only=True )
@@ -39,7 +37,6 @@ class Region1Serializer ( serializers.ModelSerializer ):
         queryset=Province.objects.all (),
         source='province'
     )
-
     class Meta:
         model = Region1
         fields = ('region1_id',
@@ -47,7 +44,6 @@ class Region1Serializer ( serializers.ModelSerializer ):
                   'province_id',
                   'province'
                   )
-
 
 # Region2 has a ForeignKey, region1:
 class Region2Serializer ( serializers.ModelSerializer ):
@@ -59,21 +55,30 @@ class Region2Serializer ( serializers.ModelSerializer ):
         queryset=Region1.objects.all (),
         source='region1'
     )
-
     class Meta:
         model = Region2
-        fields = ('region2_id', 'region2_name', 'region1_id', 'region1_name')
+        fields = ('region2_id',
+                  'region2_name',
+                  'region1',
+                  'region1_id')
 
-
-class VarietyRegion1Serializer ( serializers.ModelSerializer ):
+class VarietyRegion1Serializer(serializers.ModelSerializer):
     variety_id = serializers.ReadOnlyField ( source='variety.variety_id' )
     region1_id = serializers.ReadOnlyField ( source='region1.region1_id' )
+    class Meta:
+        model = VarietyRegion1
+        fields = ('variety_id',
+                  'region1_id'
+                  )
 
-
-class VarietyRegion2Serializer ( serializers.ModelSerializer ):
-    variety_id = serializers.ReadOnlyField ( source='variety.variety_id' )
-    region2_id = serializers.ReadOnlyField ( source='region2.region1_id' )
-
+class VarietyRegion2Serializer(serializers.ModelSerializer):
+    variety_id = serializers.ReadOnlyField(source='variety.variety_id')
+    region2_id = serializers.ReadOnlyField(source='region2.region1_id')
+    class Meta:
+        model = VarietyRegion2
+        fields = ('variety_id',
+                  'region2_id'
+                  )
 
 class VarietySerializer ( serializers.ModelSerializer ):
     varietyregion1 = VarietyRegion1Serializer (
@@ -98,34 +103,32 @@ class VarietySerializer ( serializers.ModelSerializer ):
         queryset=Region2.objects.all (),
         source='varietyregion2'
     )
-
     class Meta:
         model = Variety
         fields = ('variety_id',
                   'variety_name',
-                  'region1_id',
-                  'region1_name',
-                  'region2_id',
-                  'region2_name'
+                  'varietyregion1',
+                  'varietyregion1_ids',
+                  'varietyregion2',
+                  'varietyregion2_ids'
                   )
 
-
-class WinerySerializer ( serializers.ModelSerializer ):
-    variety = VarietySerializer ( many=False, read_only=True )
-
+class WinerySerializer(serializers.ModelSerializer):
     class Meta:
         model = Winery
-        fields = ('winery_id', 'winery_name')
+        fields = ('winery_id',
+                  'winery_name'
+                  )
 
-
-class WineryVarietySerializer ( serializers.ModelSerializer ):
-    variety_id = serializers.ReadOnlyField ( source='variety.variety_id' )
-    winery_id = serializers.ReadOnlyField ( source='winery.winery_id' )
+class WineryVarietySerializer(serializers.ModelSerializer):
+    variety_id = serializers.ReadOnlyField(source='variety.variety_id' )
+    winery_id = serializers.ReadOnlyField(source='winery.winery_id' )
 
     class Meta:
         model = WineryVariety
-        fields = ('variety_id', 'winery_id')
-
+        fields = ('variety_id',
+                  'winery_id'
+                  )
 
 class TasterSerializer ( serializers.ModelSerializer ):
     class Meta:
@@ -136,11 +139,14 @@ class TasterSerializer ( serializers.ModelSerializer ):
                   'points'
                   )
 
-
 class WineTasterSerializer ( serializers.ModelSerializer ):
     wine_id = serializers.ReadOnlyField ( source='wine.wine_id' )
     taster_id = serializers.ReadOnlyField ( source='taster.taster_id' )
-
+    class Meta:
+        model = WineTaster
+        fields = ('wine_id',
+                  'taster_id'
+                  )
 
 ###############
 class WineSerializer ( serializers.ModelSerializer ):
@@ -177,7 +183,8 @@ class WineSerializer ( serializers.ModelSerializer ):
         read_only=True
     )
     country_id = serializers.PrimaryKeyRelatedField (
-        allow_null=False,
+        required=False,
+        allow_null=True,
         many=False,
         write_only=True,
         queryset=Country.objects.all (),
@@ -188,7 +195,8 @@ class WineSerializer ( serializers.ModelSerializer ):
         read_only=True
     )
     province_id = serializers.PrimaryKeyRelatedField (
-        allow_null=False,
+        required=False,
+        allow_null=True,
         many=False,
         write_only=True,
         queryset=Province.objects.all (),
@@ -199,7 +207,8 @@ class WineSerializer ( serializers.ModelSerializer ):
         read_only=True
     )
     region1_id = serializers.PrimaryKeyRelatedField (
-        allow_null=False,
+        required=False,
+        allow_null=True,
         many=False,
         write_only=True,
         queryset=Region1.objects.all (),
@@ -209,8 +218,9 @@ class WineSerializer ( serializers.ModelSerializer ):
         many=False,
         read_only=True
     )
-    Region2_id = serializers.PrimaryKeyRelatedField (
-        allow_null=False,
+    region2_id = serializers.PrimaryKeyRelatedField (
+        required=False,
+        allow_null=True,
         many=False,
         write_only=True,
         queryset=Region2.objects.all (),
@@ -221,7 +231,8 @@ class WineSerializer ( serializers.ModelSerializer ):
         read_only=True
     )
     variety_id = serializers.PrimaryKeyRelatedField (
-        allow_null=False,
+        required=False,
+        allow_null=True,
         many=False,
         write_only=True,
         queryset=Variety.objects.all (),
@@ -233,6 +244,7 @@ class WineSerializer ( serializers.ModelSerializer ):
         read_only=True
     )
     winetaster_ids = serializers.PrimaryKeyRelatedField (
+        required=False,
         many=True,
         write_only=True,
         queryset=Taster.objects.all (),
@@ -259,7 +271,7 @@ class WineSerializer ( serializers.ModelSerializer ):
             'region2_id',
             'variety',
             'variety_id',
-            'winetaster_id',
+            'winetaster_ids',
             'winetaster'
         )
 
@@ -333,23 +345,23 @@ class WineSerializer ( serializers.ModelSerializer ):
 
         instance.save ()
 
-        # If any existing country/areas are not in updated list, delete them
+        # If any existing wines are not in updated list, delete them
         new_ids = []
-        old_ids = HeritageSiteJurisdiction.objects \
-            .values_list ( 'country_area_id', flat=True ) \
-            .filter ( heritage_site_id__exact=site_id )
+        old_ids = WineTaster.objects \
+            .values_list ( 'wine_id', flat=True ) \
+            .filter ( wine_id__exact=wine_id )
 
         # TODO Insert may not be required (Just return instance)
 
-        # Insert new unmatched country entries
-        for country in new_countries:
-            new_id = country.country_area_id
+        # Insert new unmatched taster entries
+        for taster in new_tasters:
+            new_id = taster.taster_id
             new_ids.append ( new_id )
             if new_id in old_ids:
                 continue
             else:
-                HeritageSiteJurisdiction.objects \
-                    .create ( heritage_site_id=site_id, country_area_id=new_id )
+                WineTaster.objects \
+                    .create ( wine_id=wine_id, taster_id=new_id )
 
         # Delete old unmatched taster entries
         for old_id in old_ids:
@@ -361,3 +373,5 @@ class WineSerializer ( serializers.ModelSerializer ):
                     .delete()
 
         return instance
+
+

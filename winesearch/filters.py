@@ -64,6 +64,13 @@ class WineFilter(django_filters.FilterSet):
         queryset=Region1.objects.all()
     )
 
+    price = django_filters.NumberFilter(
+        field_name='price',
+        label='Price',
+        lookup_expr='exact'
+    )
+
+
 
     #
     # # # ChoiceFilter --> This filter matches values in its choices argument. The choices must be explicitly passed

@@ -50,7 +50,7 @@ nav {
 
 .pagination > li.page-item {
     background-color: #D2B786;
-    border: 1px solid #121213;
+    border: 1px solid #fff;
     color: #fff;
     font-size: 0.5rem;
     font_color: #8E8D8A
@@ -122,7 +122,7 @@ footer p {
  */
 
 h1, h2, h3, h4 {
-    color: ##d2b786;
+    color: #d2b786;
     /* margin-top: 1em; */
     /*margin-bottom: 0.5rem;*/
     text-align: left;
@@ -134,7 +134,7 @@ h1, h2, h3, h4 {
 
 p {
     /* color: #8E8D8A; */
-    color: #000;
+    color: #d2b786;
     text-align: justify;
 }
 

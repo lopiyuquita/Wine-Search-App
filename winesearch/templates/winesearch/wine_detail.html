@@ -161,7 +161,7 @@
     {% if wine.price %}
        <div class="row">
          <div class="col-sm-2">
-           <p><b>Price ($ US): </b></p> ??? How to put the real time for "as of" basis-price???
+           <p><b>Price ($ US): </b></p>
          </div>
        <div class="col-sm-10">
            <p>{{ wine.price }}</p>
@@ -169,16 +169,27 @@
       </div>
     {% endif %}
 
-    {% if wine.taster.points %}
+    {% for wt in wine.winetaster_set.all %}
        <div class="row">
          <div class="col-sm-2">
            <p><b>Points: </b></p>
          </div>
        <div class="col-sm-10">
-           <p>{{ wine.taster.points }}</p>
+           <p>{{ wt.taster.points }}</p>
        </div>
       </div>
-    {% endif %}
+    {% endfor %}
+
+    {% for tn in wine.winetaster_set.all %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p><b>Taster Name: </b></p>
+         </div>
+       <div class="col-sm-10">
+           <p>{{ tn.taster.taster_name }}</p>
+       </div>
+      </div>
+    {% endfor %}
 
     {% if request.user.is_authenticated %}
     <button> <a class="btn btn-outline-danger" href="{% url "wine_delete" wine.wine_id %}">Delete</a></button>

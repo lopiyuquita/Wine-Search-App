@@ -23,9 +23,9 @@
   <filter>
   <div class="row">
     <div class="col-sm-3">
-      <div class="px-2 py-2" style="border:1px solid #8E8D8A; width:700px;">
+      <div class="px-2 py-2" style="border:1px solid #8E8D8A;">
         <form action="" method="get">
-          {{ filter.form.as_p }}
+          {{ filter.form|crispy }}
             <button type="submit" class="btn btn-outline-success">Filter</button>
         </form>
       </div>
@@ -34,7 +34,7 @@
      {% for wine in wine_list %}
         <p><b><a href="{% url 'wine_detail' wine.pk %}">{{ wine.wine }}</a></b></p>
 
-         {% if wine.winery %}
+         {% if wine.wine %}
              <div class="row">
                 <div class="col-sm-2">
                     <p><b>Wine</b></p>

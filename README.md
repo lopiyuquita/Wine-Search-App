@@ -69,16 +69,14 @@ I will use winemag-data-130k-v2.csv
 
 (4) Many-to-Many relationships:  
     •	There will be more than one Many-to-Many relationships in the database.  
-        - wine tasters and wine information  See the [data model the actual model file will be added later](https://github.com/lopiyuquita/si664finalproject)
-        - Ohter many-to-many relationshps exist:
+        - wine tasters and wine information
+        - Ohter many-to-many relationships exist:
             * An example of such is “varieties” and “region_1” tables
 
 
 ## Data model
-(1) [Wine Review Datamodel -the actual model file will be added later](https://github.com/lopiyuquita/si664finalproject)  
+(1) [Wine Review Datamodel](https://github.com/lopiyuquita/si664finalproject/blob/master/static/si664finalprojectlogicaldbmodel.png)  
 
-As of December 4, 2018:  
-![alt text](https://github.com/lopiyuquita/si664finalproject/blob/master/winesearch/static/si664finalprojectdatamodelDec4-1311.png)
 
 ## Package Dependencies (Not finalized as of November 30, 2018)
 certifi==2018.10.15  

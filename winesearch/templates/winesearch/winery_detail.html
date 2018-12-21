@@ -1,10 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'winesearch/base.html' %}
+{% load i18n %}
 
-</body>
-</html>
+
+   <!-- safe filter on for raw HTML stored in wine database -->
+{% block content %}
+    {% spaceless %}
+
+    {% if wine.country.all %}
+      {% for country in wine.country.all %}
+        {% if country.province.region1.region2.variety %}
+          {% ifchanged country.province.region1.region2.variety.variety_id %}
+            {% if forloop.first %}
+                {{ country.province.region1.region2.variety.variety_name.strip }}
+            {% else %}
+                {{ country.province.region1.region2.variety.variety_name.strip }}
+            {% endif %}
+          {% endifchanged %}
+        {% elif country.province.region1.region2 %}
+            {% ifchanged country.province.region1.region2.region2_id %}
+                {% if forloop.first %}
+                     {{ country.province.region1.region2.region2_name.strip }}
+                {% else %}
+                    {{ country.province.region1.region2.region2_name }}
+                {% endif %}
+            {% endifchanged %}
+        {% elif country.province.region1 %}
+            {% ifchanged country.province.region1.region_id %}
+                {% if forloop.first %}
+                    {{ country.region1.region1_name.strip }}
+                {% else %}
+                    {{ country.region1.region1_name.strip }}
+                {% endif %}
+            {% endifchanged %}
+        {% elif country.province %}
+            {% ifchanged country.province.province_id %}
+                {% if forloop.first %}
+                    {{ country.province.province_name.strip }}
+                {% else %}
+                    {{ country.province.province_name.strip }}
+                {% endif %}
+            {% endifchanged %}
+
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% endspaceless %}
+
+    {% spaceless %}
+           <p>
+             {% for country in wine.country.all %}
+               {% if forloop.last %}    <!-- True if this is the last time through the loop -->
+                 {{ country.country_name.strip }}
+               {% else %}
+                 {{ country_area.country_area_name.strip }}
+               {% endif %}
+             {% endfor %}
+           </p>
+    {% endspaceless %}
+
+
+{#    {% if wine.wine %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#             <p><b>Label: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.wine }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endif %}#}
+
+
+
+    {% if winery.winery_name %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p><b>Winery: </b></p>
+         </div>
+       <div class="col-sm-10">
+           <p>{{ winery.winery_name }}</p>
+       </div>
+      </div>
+    {% endif %}
+
+
+{#    {% if wine.variety %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Variety: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.variety.variety_name }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#     {% endif %}#}
+{##}
+{#    {% if wine.description %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Description: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.description }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endif %}#}
+{##}
+{#    {% if wine.designation %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Designation: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.designation }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endif %}#}
+{##}
+{#    {% if wine.provinces %}#}
+{#        <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Province: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.province.province_names }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endif %}#}
+{##}
+{##}
+{#     {% if wine.region1 %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Region: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.region1.region1_name }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#     {% endif %}#}
+{##}
+{#    {% if wine.region2 %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#             <p><b>Sub Region: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.region2.region2_name }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#     {% endif %}#}
+{##}
+{#    {% if wine.country %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Country: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.country }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endif %}#}
+{##}
+{#    {% if wine.price %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Price ($ US): </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wine.price }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endif %}#}
+{##}
+{#    {% for wt in wine.winetaster_set.all %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Points: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ wt.taster.points }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endfor %}#}
+{##}
+{#    {% for tn in wine.winetaster_set.all %}#}
+{#       <div class="row">#}
+{#         <div class="col-sm-2">#}
+{#           <p><b>Taster Name: </b></p>#}
+{#         </div>#}
+{#       <div class="col-sm-10">#}
+{#           <p>{{ tn.taster.taster_name }}</p>#}
+{#       </div>#}
+{#      </div>#}
+{#    {% endfor %}#}
+{##}
+{#    {% if request.user.is_authenticated %}#}
+{#    <button> <a class="btn btn-outline-danger" href="{% url "wine_delete" wine.wine_id %}">Delete</a></button>#}
+{#    <button> <a class="btn btn-outline-danger" href="{% url "wine_update" wine.wine_id %}">Update</a></button>#}
+{#    {% endif %}#}
+
+ {% endblock content %}

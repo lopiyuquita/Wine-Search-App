@@ -285,7 +285,7 @@ class WineSerializer ( serializers.ModelSerializer ):
 
         # print(validated_data)
 
-        tasters = validated_data.pop('wine_taster')
+        tasters = validated_data.get('wine_taster')
         wine = Wine.objects.create(**validated_data)
 
         if tasters is not None:
@@ -299,7 +299,7 @@ class WineSerializer ( serializers.ModelSerializer ):
     def update(self, instance, validated_data):
         # site_id = validated_data.pop('wine_id')
         wine_id = instance.wine_id
-        new_tasters = validated_data.pop('wine_taster')
+        new_tasters = validated_data.get('wine_taster')
 
         instance.wine = validated_data.get(
             'wine_name',
@@ -314,7 +314,7 @@ class WineSerializer ( serializers.ModelSerializer ):
             instance.designation
         )
         instance.price = validated_data.get(
-            'date_inscribed',
+            'price',
             instance.price
         )
         instance.winery_id = validated_data.get(
@@ -323,7 +323,7 @@ class WineSerializer ( serializers.ModelSerializer ):
         )
         instance.country_id = validated_data.get(
             'country_id',
-            instance.counry_id
+            instance.country_id
         )
         instance.province_id = validated_data.get(
             'province_id',
@@ -354,23 +354,23 @@ class WineSerializer ( serializers.ModelSerializer ):
         # TODO Insert may not be required (Just return instance)
 
         # Insert new unmatched taster entries
-        for taster in new_tasters:
-            new_id = taster.taster_id
-            new_ids.append ( new_id )
-            if new_id in old_ids:
-                continue
-            else:
-                WineTaster.objects \
-                    .create ( wine_id=wine_id, taster_id=new_id )
-
-        # Delete old unmatched taster entries
-        for old_id in old_ids:
-            if old_id in new_ids:
-                continue
-            else:
-                WineTaster.objects \
-                    .filter(wine_id=wine_id, taster_id=old_id) \
-                    .delete()
+        # for taster in new_tasters:
+        #     new_id = taster.taster_id
+        #     new_ids.append ( new_id )
+        #     if new_id in old_ids:
+        #         continue
+        #     else:
+        #         WineTaster.objects \
+        #             .create ( wine_id=wine_id, taster_id=new_id )
+        #
+        # # Delete old unmatched taster entries
+        # for old_id in old_ids:
+        #     if old_id in new_ids:
+        #         continue
+        #     else:
+        #         WineTaster.objects \
+        #             .filter(wine_id=wine_id, taster_id=old_id) \
+        #             .delete()
 
         return instance
 

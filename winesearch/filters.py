@@ -1,5 +1,5 @@
 import django_filters
-
+from django.db.models import F
 from winesearch.models import Country, Province, Region1, Region2, Variety, Wine, Winery, Taster, VarietyRegion1, VarietyRegion2, WineryVariety, WineTaster
 
 # (1) field_name --> The name of the model field that is filtered against. If this argument is not provided,
@@ -70,29 +70,23 @@ class WineFilter(django_filters.FilterSet):
         lookup_expr='exact'
     )
 
-
-
-    #
-    # # # ChoiceFilter --> This filter matches values in its choices argument. The choices must be explicitly passed
-    # # # when the filter is declared on the FilterSet. For example,
-    # #
-    #
-    #
-    # price = django_filters.NumberFilter(
+    # price2 = django_filters.RangeFilter(
     #     field_name='price',
     #     label='Price',
     #     lookup_expr='exact'
+    #
+    #
+    #
     # )
+    # p2 = Wine.objects.all().order_by( 'price' )
     #
-    #
-    # # Add date_inscribed filter here
-    # point = django_filters.NumberFilter(
-    #     field_name='points',
-    #     label='Point',
-    #     #queryset=HeritageSite.objects.all().order_by('date_inscribed'),
-    #     lookup_expr='exact'
-    # )
-    #
+    # # Range: Wines between 0 and 20 dollars
+    # f = F( {'price_min': '0', 'price_max': '25'}, queryset=p2 )
+    # f = F( {'price_min': '26', 'price_max': '50'}, queryset=p2 )
+    # f = F( {'price_min': '51', 'price_max': '75'}, queryset=p2 )
+    # f = F( {'price_min': '76', 'price_max': '100'}, queryset=p2 )
+    # # Min-Only: Books costing more the 11€
+    # f = F( {'price_min': '101'}, queryset=p2 )
 
 
     class Meta:
@@ -100,4 +94,14 @@ class WineFilter(django_filters.FilterSet):
         #form = SearchForm
         #fields [] is required, even if empty.
         fields = []
+
+
+
+
+class WineryFilter(django_filters.FilterSet):
+    winery_name = django_filters.CharFilter(
+        field_name='winery',
+        label='Winery',
+        lookup_expr='icontains'
+    )
 

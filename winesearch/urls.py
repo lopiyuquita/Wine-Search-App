@@ -13,7 +13,7 @@ urlpatterns = [
     path('winery/', views.WineryListView.as_view(), name='winery_list'),
     path('winery/<int:pk>/', views.WineryDetailView.as_view(), name='winery'),
     path('wine_filter/', views.WineFilterView.as_view(), name='wine_filter'),
-
+    path('winery_filter/', views.WineryFilterView.as_view(), name='winery_filter'),
 ]
 
 # ReverseMatch -->@method_decorator(login_required, name='dispatch')   refer to name='xxx'

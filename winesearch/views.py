@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from .models import Country, Province, Region1, Region2, Variety, Wine, Winery, Taster
 from .forms import WineForm
 from .filters import WineFilter
+from .filters import WineryFilter
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -65,8 +66,8 @@ class WineDetailView(generic.DetailView):
 class WineryListView(generic.ListView):
     model = Winery
     context_object_name = 'wineries'
-    template_name = 'winesearch/winery.html'
-    paginate_by = 50
+    template_name = 'winesearch/winery_list.html'
+    paginate_by = 1000
 
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -91,28 +92,32 @@ class WineryDetailView(generic.DetailView):
             .order_by('winery_name')
 
 
+
+
 @method_decorator(login_required, name='dispatch')
-class WineCreateView(generic.View):
+class WineCreateView(generic.CreateView):
     model = Wine
     form_class = WineForm
     success_message = "Wine created successfully"
-    template_name = 'wines/wine_new.html'
+    template_name = 'winesearch/wine_new.html'
+
+
     # fields = '__all__' <-- superseded by form_class]
     #  success_url = reverse_lazy('wines/wine_list')
 
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-    def post(self, request):
-        form = WineForm(request.POST)
-        if form.is_valid():
-            wine = form.save(commit=False)
-            wine.save()
-            return render(request, 'winesearch/wine_new.html', {'form': form})
-
-    def get(self, request):
-        form = WineForm()
-        return render(request, 'winesearch/wine_new.html', {'form': form})
+    # def dispatch(self, *args, **kwargs):
+    #     return super().dispatch(*args, **kwargs)
+    #
+    # def post(self, request):
+    #     form = WineForm(request.POST)
+    #     if form.is_valid():
+    #         wine = form.save(commit=False)
+    #         wine.save()
+    #         return render(request, 'winesearch/wine_new.html', {'form': form})
+    #
+    # def get(self, request):
+    #     form = WineForm()
+    #     return render(request, 'winesearch/wine_new.html', {'form': form})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -128,13 +133,6 @@ class WineUpdateView(generic.UpdateView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    # def form_valid(self, form):
-    #     wine = form.save(commit=False)
-    #     # wine.updated_by = self.request.user
-    #     # wine.date_updated = timezone.now()
-    #     wine.save()
-    #     return render(request, 'winesearch/wine_update.html', {'form': form})
-
     def form_valid(self, form):
             wine = form.save(commit=False)
             wine.updated_by = self.request.user
@@ -147,17 +145,13 @@ class WineUpdateView(generic.UpdateView):
 class WineDeleteView(generic.DeleteView):
     model = Wine
     success_message = "Wine deleted successfully"
-    success_url = reverse_lazy('wines')
+    success_url = reverse_lazy('wine_list')
     context_object_name = 'wine'
     template_name = 'winesearch/wine_delete.html'
 
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        return HttpResponseRedirect(self.get_success_url())
 
 
 class PaginatedFilterView(generic.View):
@@ -177,4 +171,13 @@ class WineFilterView(PaginatedFilterView, FilterView):
     filterset_class = WineFilter
     context_object_name = 'wine_list'
     template_name = 'winesearch/wine_filter.html'
+    paginate_by = 4000
+
+
+class WineryFilterView(PaginatedFilterView, FilterView):
+    model = Winery
+    #form_class = SearchForm
+    filterset_class = WineryFilter
+    context_object_name = 'winery_list'
+    template_name = 'winesearch/winery_filter.html'
     paginate_by = 4000

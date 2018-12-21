@@ -5,12 +5,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
+<form method="post" novalidate>
+{% csrf_token %}
 
     <p>Are you sure you want to delete the Wine "{{ wine.wine }}"?</p>
-    <button class="btn btn-outline-success">Delete</button>
+    <button type="submit" class="btn btn-outline-success">Delete</button>
     <a class="btn btn-outline-secondary" href="{% url 'wine_detail' wine.pk %}">Cancel</a>
-
-
-
+</form>
 {% endblock content %}

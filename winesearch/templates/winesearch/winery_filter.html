@@ -1,0 +1,68 @@
+{% extends 'winesearch/base.html' %}
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% include 'winesearch/pagination.html' %}
+<article>
+  <header>
+  <div class="row">
+    <div class="col-sm-11">
+        <h3><font color='#d2b786'>Winery Search Filter</font></h3>
+    </div>
+  </div>
+  </header>
+
+
+  <filter>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="px-2 py-2" style="border:1px solid #8E8D8A;">
+        <form action="" method="get">
+          {{ filter.form|crispy }}
+            <button type="submit" class="btn btn-outline-success">Filter</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-9">
+     {% for winery_name in winery_list %}
+        <p><b><a href="{% url 'winery_detail' winery.pk %}">{{ winery.winery_name }}</a></b></p>
+
+{#         {% if wine.winery %}#}
+{#             <div class="row">#}
+{#                <div class="col-sm-2">#}
+{#                    <p><b>Wine</b></p>#}
+{#                </div>#}
+{#                  <div class="col-sm-10">#}
+{#                    <p>{{ wine.wine }}</p>#}
+{#                </div>#}
+{#             </div>#}
+{#         {% endif %}#}
+{##}
+{#        {% if wine.description %}#}
+{#                <div class="row">#}
+{#                  <div class="col-sm-2">#}
+{#                    <p><b>Description</b></p>#}
+{#                  </div>#}
+{#                  <div class="col-sm-10">#}
+{#                    <p>{{ wine.description }}</p>#}
+{#                  </div>#}
+{#                </div>#}
+{#              {% endif %}#}
+{##}
+{#         {% if wine.winery %}#}
+{#                <div class="row">#}
+{#                  <div class="col-sm-2">#}
+{#                    <p><b>Winery</b></p>#}
+{#                  </div>#}
+{#                  <div class="col-sm-10">#}
+{#                    <p>{{ wine.winery }}</p>#}
+{#                  </div>#}
+{#                </div>#}
+{#              {% endif %}#}
+     {% endfor %}
+    </div>
+  </div>
+  </filter>
+{% endblock content %}

@@ -92,32 +92,30 @@ class WineryDetailView(generic.DetailView):
             .order_by('winery_name')
 
 
-
-
 @method_decorator(login_required, name='dispatch')
 class WineCreateView(generic.CreateView):
     model = Wine
     form_class = WineForm
     success_message = "Wine created successfully"
     template_name = 'winesearch/wine_new.html'
-
-
     # fields = '__all__' <-- superseded by form_class]
     #  success_url = reverse_lazy('wines/wine_list')
 
-    # def dispatch(self, *args, **kwargs):
-    #     return super().dispatch(*args, **kwargs)
-    #
-    # def post(self, request):
-    #     form = WineForm(request.POST)
-    #     if form.is_valid():
-    #         wine = form.save(commit=False)
-    #         wine.save()
-    #         return render(request, 'winesearch/wine_new.html', {'form': form})
-    #
-    # def get(self, request):
-    #     form = WineForm()
-    #     return render(request, 'winesearch/wine_new.html', {'form': form})
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request):
+        form = WineForm(request.POST)
+        if form.is_valid():
+            wine = form.save(commit=False)
+            wine.save()
+            return redirect(wine) # shortcut to object's get_absolute_url()
+
+        return render(request, 'winesearch/wine_new.html', {'form': form})
+
+    def get(self, request):
+        form = WineForm()
+        return render(request, 'winesearch/wine_new.html', {'form': form})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -134,11 +132,13 @@ class WineUpdateView(generic.UpdateView):
         return super().dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-            wine = form.save(commit=False)
-            wine.updated_by = self.request.user
-            wine.updated_at = timezone.now()
-            wine.save()
-            return render(self.request, 'winesearch/wine_update.html', {'form': form})
+        wine = form.save(commit=False)
+        wine.updated_by = self.request.user
+        wine.updated_at = timezone.now()
+        wine.save()
+
+        return HttpResponseRedirect(wine.get_absolute_url())
+        # return render(self.request, 'winesearch/wine_update.html', {'form': form})
 
 
 @method_decorator(login_required, name='dispatch')

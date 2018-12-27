@@ -8,6 +8,7 @@
 
 # Reference: https://docs.djangoproject.com/en/2.1/ref/models/options/#unique-together
 from django.db import models
+from django.urls import reverse
 
 
 class Country(models.Model):
@@ -118,7 +119,7 @@ class Wine(models.Model):
     region2 = models.ForeignKey(Region2, blank=True, null=True, on_delete=models.DO_NOTHING)
     variety = models.ForeignKey(Variety, blank=True, null=True, on_delete=models.DO_NOTHING)
 
-    taster = models.ManyToManyField(Taster, through='WineTaster')
+    taster = models.ManyToManyField(Taster, through='WineTaster', blank=True, related_name='wines')
 
     class Meta:
         managed = False

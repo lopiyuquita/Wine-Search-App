@@ -130,7 +130,7 @@ class WineryVarietySerializer(serializers.ModelSerializer):
                   'winery_id'
                   )
 
-class TasterSerializer ( serializers.ModelSerializer ):
+class TasterSerializer (serializers.ModelSerializer ):
     class Meta:
         model = Winery
         fields = ('taster_id',
@@ -139,30 +139,30 @@ class TasterSerializer ( serializers.ModelSerializer ):
                   'points'
                   )
 
-class WineTasterSerializer ( serializers.ModelSerializer ):
-    wine_id = serializers.ReadOnlyField ( source='wine.wine_id' )
-    taster_id = serializers.ReadOnlyField ( source='taster.taster_id' )
+
+class WineTasterSerializer(serializers.ModelSerializer):
+    wine_id = serializers.ReadOnlyField(source='wine.wine_id')
+    taster_id = serializers.ReadOnlyField(source='taster.taster_id')
+
     class Meta:
         model = WineTaster
-        fields = ('wine_id',
-                  'taster_id'
-                  )
+        fields = ('wine_id', 'taster_id')
 
-###############
-class WineSerializer ( serializers.ModelSerializer ):
+
+class WineSerializer(serializers.ModelSerializer):
     wine = serializers.CharField (
         allow_blank=False,
         max_length=150
     )
-    description = serializers.CharField (
+    description = serializers.CharField(
         allow_blank=False,
         max_length=1000
     )
-    designation = serializers.CharField (
+    designation = serializers.CharField(
         allow_blank=False,
         max_length=100
     )
-    price = serializers.DecimalField (
+    price = serializers.DecimalField(
         allow_null=True,
         max_digits=11,
         decimal_places=2
@@ -171,84 +171,83 @@ class WineSerializer ( serializers.ModelSerializer ):
         many=False,
         read_only=True
     )
-    winery_id = serializers.PrimaryKeyRelatedField (
+    winery_id = serializers.PrimaryKeyRelatedField(
         allow_null=False,
         many=False,
         write_only=True,
-        queryset=Winery.objects.all (),
+        queryset=Winery.objects.all(),
         source='winery'
     )
-    country = CountrySerializer (
+    country = CountrySerializer(
         many=False,
         read_only=True
     )
-    country_id = serializers.PrimaryKeyRelatedField (
+    country_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         many=False,
         write_only=True,
-        queryset=Country.objects.all (),
+        queryset=Country.objects.all(),
         source='country'
     )
-    province = ProvinceSerializer (
+    province = ProvinceSerializer(
         many=False,
         read_only=True
     )
-    province_id = serializers.PrimaryKeyRelatedField (
+    province_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         many=False,
         write_only=True,
-        queryset=Province.objects.all (),
+        queryset=Province.objects.all(),
         source='province'
     )
-    region1 = Region1Serializer (
+    region1 = Region1Serializer(
         many=False,
         read_only=True
     )
-    region1_id = serializers.PrimaryKeyRelatedField (
+    region1_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         many=False,
         write_only=True,
-        queryset=Region1.objects.all (),
+        queryset=Region1.objects.all(),
         source='region1'
     )
-    region2 = Region2Serializer (
+    region2 = Region2Serializer(
         many=False,
         read_only=True
     )
-    region2_id = serializers.PrimaryKeyRelatedField (
+    region2_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         many=False,
         write_only=True,
-        queryset=Region2.objects.all (),
+        queryset=Region2.objects.all(),
         source='region2'
     )
-    variety = VarietySerializer (
+    variety = VarietySerializer(
         many=False,
         read_only=True
     )
-    variety_id = serializers.PrimaryKeyRelatedField (
+    variety_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         many=False,
         write_only=True,
-        queryset=Variety.objects.all (),
+        queryset=Variety.objects.all(),
         source='variety'
     )
-    winetaster = WineTasterSerializer (
+    wine_tasters = WineTasterSerializer(
         source='wine_taster_set',  # Note: _set
         many=True,
         read_only=True
     )
-    winetaster_ids = serializers.PrimaryKeyRelatedField (
-        required=False,
+    taster_ids = serializers.PrimaryKeyRelatedField(
         many=True,
         write_only=True,
-        queryset=Taster.objects.all (),
-        source='winetaster'
+        queryset=Taster.objects.all(),
+        source='wine_tasters'
     )
 
     class Meta:
@@ -271,8 +270,8 @@ class WineSerializer ( serializers.ModelSerializer ):
             'region2_id',
             'variety',
             'variety_id',
-            'winetaster_ids',
-            'winetaster'
+            'wine_tasters',
+            'taster_ids'
         )
 
     def create(self, validated_data):
@@ -283,9 +282,9 @@ class WineSerializer ( serializers.ModelSerializer ):
         # extract each taster_id element and add entries to junction/associative
         # winetaster table.  :param validated_data:  :return: site
 
-        # print(validated_data)
+        print(validated_data)
 
-        tasters = validated_data.get('wine_taster')
+        tasters = validated_data.pop('wine_tasters')
         wine = Wine.objects.create(**validated_data)
 
         if tasters is not None:
@@ -297,9 +296,8 @@ class WineSerializer ( serializers.ModelSerializer ):
         return wine
 
     def update(self, instance, validated_data):
-        # site_id = validated_data.pop('wine_id')
         wine_id = instance.wine_id
-        new_tasters = validated_data.get('wine_taster')
+        new_tasters = validated_data.pop('wine_tasters')
 
         instance.wine = validated_data.get(
             'wine_name',
@@ -341,37 +339,27 @@ class WineSerializer ( serializers.ModelSerializer ):
             'variety_id',
             instance.variety_id
         )
-
-
-        instance.save ()
+        instance.save()
 
         # If any existing wines are not in updated list, delete them
         new_ids = []
         old_ids = WineTaster.objects \
-            .values_list ( 'wine_id', flat=True ) \
-            .filter ( wine_id__exact=wine_id )
-
-        # TODO Insert may not be required (Just return instance)
+            .values_list('taster_id', flat=True).filter(wine_id__exact=wine_id)
 
         # Insert new unmatched taster entries
-        # for taster in new_tasters:
-        #     new_id = taster.taster_id
-        #     new_ids.append ( new_id )
-        #     if new_id in old_ids:
-        #         continue
-        #     else:
-        #         WineTaster.objects \
-        #             .create ( wine_id=wine_id, taster_id=new_id )
-        #
-        # # Delete old unmatched taster entries
-        # for old_id in old_ids:
-        #     if old_id in new_ids:
-        #         continue
-        #     else:
-        #         WineTaster.objects \
-        #             .filter(wine_id=wine_id, taster_id=old_id) \
-        #             .delete()
+        for taster in new_tasters:
+            new_id = taster.taster_id
+            new_ids.append(new_id)
+            if new_id in old_ids:
+                continue
+            else:
+                WineTaster.objects.create(wine_id=wine_id, taster_id=new_id)
+
+        # Delete old unmatched taster entries
+        for old_id in old_ids:
+            if old_id in new_ids:
+                continue
+            else:
+                WineTaster.objects.filter(wine_id=wine_id, taster_id=old_id).delete()
 
         return instance
-
-

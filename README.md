@@ -40,7 +40,7 @@ Technical and applicational purposes of the project are described as follows:
                         • modify()  
                         • delete()  
                                                                    
-**2. The application purpose)**  
+**2. The application purpose**  
     • To develop a webapp which allows users to run general/ starting-point search to find wines that 
     may be be of their interests.  
     • To that end, the intended users of this app will be people who are not familiar with wines, who are not
